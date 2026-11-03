@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="es-CO">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Generar claves de notificaciones</title>
+<style>
+  body{margin:0;background:#eef3f2;color:#17212b;font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  main{max-width:720px;margin:0 auto;padding:32px 18px}
+  h1{font-size:26px;margin:0 0 8px}
+  .card{background:#fff;border-radius:20px;padding:20px;margin:18px 0;box-shadow:0 10px 30px rgba(20,40,70,.1)}
+  label{display:block;font-weight:700;margin:14px 0 6px}
+  .row{display:flex;gap:8px}
+  input{flex:1;min-width:0;font:14px ui-monospace,Menlo,Consolas,monospace;padding:12px;border:1.5px solid #d5dbe3;border-radius:12px;background:#fbfcfd}
+  button{border:0;border-radius:999px;font:inherit;font-weight:800;cursor:pointer;padding:0 18px;min-height:46px;background:#e7f2f1;color:#0f766e}
+  button.main{background:linear-gradient(100deg,#0f766e,#5b21b6);color:#fff}
+  .warn{background:#fff4e5;border:1px solid #f5c98a;color:#7a4a00;border-radius:14px;padding:12px 14px;font-size:14px}
+  code{background:#f1f5f9;padding:2px 6px;border-radius:6px}
+</style>
+</head>
+<body>
+<main>
+  <h1>Claves para las notificaciones</h1>
+  <p>Esta página crea, en tu propio navegador, el par de claves que identifica a tu servidor ante los servicios de notificaciones de Apple, Google y Mozilla. No se envía nada a internet.</p>
+  <div class="card">
+    <button class="main" type="button" id="gen">Generar claves nuevas</button>
+    <label for="pub">VAPID_PUBLIC_KEY (pública)</label>
+    <div class="row"><input id="pub" readonly><button type="button" data-copy="pub">Copiar</button></div>
+    <label for="priv">VAPID_PRIVATE_KEY (privada: no la compartas)</label>
+    <div class="row"><input id="priv" readonly><button type="button" data-copy="priv">Copiar</button></div>
+    <label for="sub">VAPID_SUBJECT (tu correo)</label>
+    <div class="row"><input id="sub" value="mailto:tucorreo@ejemplo.com"><button type="button" data-copy="sub">Copiar</button></div>
+  </div>
+  <div class="warn">Genera las claves <b>una sola vez</b>. Si después las cambias, todos los teléfonos tendrán que volver a activar las notificaciones. Guarda la clave privada solo en Netlify (Variables de entorno) y en un lugar seguro, nunca dentro de la carpeta <code>public</code>.</div>
+</main>
+<script>
+const b64u=buf=>btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+document.getElementById('gen').onclick=async()=>{
+  try{
+    const kp=await crypto.subtle.generateKey({name:'ECDSA',namedCurve:'P-256'},true,['sign','verify']);
+    const raw=await crypto.subtle.exportKey('raw',kp.publicKey);
+    const jwk=await crypto.subtle.exportKey('jwk',kp.privateKey);
+    document.getElementById('pub').value=b64u(raw);
+    document.getElementById('priv').value=jwk.d;
+  }catch(e){alert('Tu navegador no pudo generar las claves. Prueba con Chrome, Edge, Safari o Firefox actualizados.');}
+};
+document.querySelectorAll('[data-copy]').forEach(b=>b.onclick=async()=>{const i=document.getElementById(b.dataset.copy);i.select();try{await navigator.clipboard.writeText(i.value);b.textContent='Copiado';setTimeout(()=>b.textContent='Copiar',1500)}catch(e){document.execCommand('copy')}});
+</script>
+</body>
+</html>
