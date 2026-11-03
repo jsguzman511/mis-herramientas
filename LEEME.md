@@ -77,6 +77,25 @@ Al importar puedes **combinar** con lo que ya tengas o **reemplazar**; nunca se 
 
 ---
 
+## Trabajar en equipo (tu teléfono y el de tu asistente)
+
+1. En **tu** teléfono abre la app → en la pantalla de inicio, sección **Trabajar en equipo** → **Crear espacio compartido**. Tus datos actuales de las tres herramientas se suben cifrados.
+2. Toca **Compartir** (o **Copiar código**) y envíale el código a tu asistente por WhatsApp. **Trátalo como una contraseña**: quien lo tenga puede ver y editar los datos.
+3. Tu asistente instala la app en su teléfono (paso 4), la abre desde el ícono → **Unirme con un código** → pega el código → **Unirme**.
+4. Listo: Cotizador, Finanzas y Calendario quedan iguales en los dos teléfonos.
+
+Cómo funciona:
+
+- Los datos se **cifran en el teléfono** antes de subir. El servidor solo guarda texto ilegible; ni Netlify ni nadie sin el código puede leerlo.
+- La app sincroniza al abrirse, después de cada cambio y cada 30 segundos mientras está abierta. Arriba a la derecha verás **● Sincronizado**.
+- Si los dos cambian cosas al mismo tiempo, los cambios se combinan registro por registro (cada cliente, cotización, movimiento o evento por separado). Si los dos editan **exactamente el mismo registro**, queda la versión más reciente.
+- Sin internet se sigue trabajando normal y se sincroniza cuando vuelve la señal.
+- Cada teléfono conserva lo suyo: el borrador de cotización en curso, el perfil de Finanzas abierto, el tema y los avisos descartados del Calendario. Los recordatorios (notificaciones) se activan en cada teléfono por separado.
+- En Finanzas, el saldo de cada cuenta ahora se calcula con el saldo inicial más los movimientos, y las transferencias quedan registradas como movimientos. Así los saldos cuadran aunque dos personas registren cosas a la vez.
+- **Salir del espacio** deja los datos en ese teléfono pero sin sincronizar. **Eliminar el espacio del servidor** borra la copia cifrada (cada teléfono conserva la suya).
+
+---
+
 ## Cómo actualizar la app
 
 1. Cambia los archivos (por ejemplo, pídele a Claude una mejora y que te entregue la carpeta `public` actualizada).
