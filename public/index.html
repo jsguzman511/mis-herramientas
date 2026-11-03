@@ -1,0 +1,54 @@
+<!doctype html><html lang="es-CO"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#17212b">
+<title>Mis Herramientas</title><meta name="description" content="Cotizador, finanzas y calendario en una sola app."><link rel="manifest" href="/manifest.webmanifest"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Herramientas"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><link rel="icon" type="image/png" href="/icons/favicon-32.png">
+<style>
+:root{--bg:#eef3f2;--ink:#17212b;--muted:#5d6b78;--card:#ffffff;--sh:0 10px 30px rgba(20,40,70,.12);color-scheme:light}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;min-height:100vh;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.home{padding:28px 16px 24px;max-width:560px;margin:0 auto}
+.home h1{font-size:30px;line-height:1.1;margin:8px 4px 6px}
+.home .sub{margin:0 4px 26px;color:var(--muted)}
+.tile{display:flex;flex-direction:column;gap:14px;text-align:left;border-radius:28px;padding:22px;margin-bottom:16px;color:#fff;text-decoration:none;position:relative;overflow:hidden;box-shadow:var(--sh);min-height:176px}
+.tile:focus-visible{outline:3px solid #4f46e5;outline-offset:3px}
+.tile::after{content:"";position:absolute;right:-60px;top:-70px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.14)}
+.tile .ic{width:54px;height:54px;border-radius:18px;background:rgba(255,255,255,.2);display:grid;place-items:center;position:relative;z-index:1}
+.tile .ic svg{width:28px;height:28px}
+.tile h2{margin:0;font-size:24px;position:relative;z-index:1}
+.tile p{margin:0;opacity:.9;font-size:15px;position:relative;z-index:1}
+.tile .go{margin-top:auto;font-weight:700;font-size:15px;position:relative;z-index:1}
+.t-cot{background:linear-gradient(135deg,#0f766e 0%,#3d8f78 100%)}
+.t-fin{background:linear-gradient(135deg,#171915 0%,#33402a 100%)}.t-fin .go{color:#c9f65b}
+.t-cal{background:linear-gradient(135deg,#1e1b4b 0%,#3730a3 50%,#6d28d9 100%)}.t-cal .go{color:#c4b5fd}
+.t-cal::before{content:"";position:absolute;left:-60px;bottom:-90px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(34,211,238,.45) 0%,transparent 70%)}
+.install{background:var(--card);border-radius:22px;padding:16px 18px;margin:0 0 18px;box-shadow:var(--sh)}
+.install[hidden]{display:none}
+.install b{display:block;margin-bottom:4px}.install p{margin:0;color:var(--muted);font-size:14px}
+.install button{margin-top:10px;border:0;border-radius:999px;background:linear-gradient(100deg,#0f766e,#5b21b6);color:#fff;font:inherit;font-weight:800;min-height:44px;padding:0 20px;cursor:pointer}
+.note{color:var(--muted);font-size:13px;text-align:center;margin:18px 8px 0}
+@media (min-width:960px){.home{max-width:1180px;padding:48px 28px 32px}.home h1{font-size:38px}.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.tile{margin-bottom:0;min-height:240px}}
+@media (max-height:520px){.home{padding:16px}.home h1{font-size:24px}.home .sub{margin-bottom:14px}.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.tile{min-height:0;margin-bottom:0;padding:14px}.tile p{display:none}.tile h2{font-size:19px}}
+</style><script src="/shell.js"></script></head><body>
+<main class="home">
+  <h1>¿Qué vas a hacer hoy?</h1>
+  <p class="sub">Elige una herramienta. Cada una guarda sus datos por separado.</p>
+  <div class="install" id="inst" hidden><b id="instT"></b><p id="instP"></p><button type="button" id="instB" hidden>Instalar la app</button></div>
+  <div class="tiles">
+    <a class="tile t-cot" href="/cotizador.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg></span><h2>Cotizador</h2><p>Arma cotizaciones con tu marca y envíalas en PDF por WhatsApp.</p><span class="go">Abrir →</span></a>
+    <a class="tile t-fin" href="/finanzas.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 7V5a2 2 0 0 0-2-2H5a2 2 0 0 0 0 4h14a1 1 0 0 1 1 1v3"/><path d="M3 5v14a2 2 0 0 0 2 2h14a1 1 0 0 0 1-1v-3"/><path d="M21 12v4h-4a2 2 0 0 1 0-4z"/></svg></span><h2>Finanzas</h2><p>Ingresos, gastos, cuentas, deudas y metas, con los perfiles que quieras.</p><span class="go">Abrir →</span></a>
+    <a class="tile t-cal" href="/calendario.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg></span><h2>Calendario</h2><p>Organiza tus días, planifica tus actividades y mantén tus compromisos bajo control.</p><span class="go">Abrir →</span></a>
+  </div>
+  <p class="note">Tus datos se guardan en este teléfono. Haz copias de seguridad de vez en cuando.</p>
+</main>
+<script>
+(function(){
+  var standalone=(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;
+  var ios=/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+  var box=document.getElementById('inst'),T=document.getElementById('instT'),P=document.getElementById('instP'),B=document.getElementById('instB');
+  if(standalone)return;
+  if(ios){T.textContent='Instálala en tu iPhone';P.textContent='En Safari toca Compartir y luego «Agregar a pantalla de inicio». Así funciona como app y puede enviarte recordatorios.';box.hidden=false;return;}
+  var ev=null;
+  window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();ev=e;T.textContent='Instala la app en este dispositivo';P.textContent='Ábrela desde tu pantalla de inicio, sin conexión y con recordatorios.';B.hidden=false;box.hidden=false;});
+  B.addEventListener('click',function(){if(!ev)return;ev.prompt();ev.userChoice.then(function(){box.hidden=true;ev=null;});});
+  window.addEventListener('appinstalled',function(){box.hidden=true;});
+})();
+</script>
+</body></html>
