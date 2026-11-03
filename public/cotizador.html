@@ -222,7 +222,7 @@ select.st-rechazada{background-color:#fee2e2;color:#991b1b}
   .mini{bottom:calc(env(safe-area-inset-bottom) + 72px)}
 }
 </style>
-<style>html{padding-top:0!important}body::before{display:none!important}</style><script src="/shell.js" data-title="Cotizador"></script></head>
+<style>html{padding-top:0!important}body::before{display:none!important}</style><script src="/shell.js" data-title="Cotizador"></script><script src="/sync.js"></script><script>addEventListener("load",function(){AppSync.start(["cotizador"])})</script></head>
 <body>
 <div id="fatal" hidden></div>
 <div id="app"></div>
@@ -711,6 +711,7 @@ function saveNow(){
   if(!storageOK) return;
   try{
     localStorage.setItem(KEY,JSON.stringify({brand:S.brand,catalog:S.catalog,draft:S.draft,quotes:S.quotes,templates:S.templates}));
+    try{ window.AppSync&&window.AppSync.changed('cotizador'); }catch(e){}
     if(storageFull){ storageFull=false; renderBanner(); }
   }catch(e){
     const quota=!!e&&(e.name==='QuotaExceededError'||e.code===22||e.code===1014);
@@ -1522,6 +1523,13 @@ document.addEventListener('focusout',e=>{
 /* ---------- arranque ---------- */
 safe(function(){
   load(); buildShell(); fillBrand(); wireBrand(); wireCatalog(); wireQuote(); wireHistory(); wireTemplates(); refreshExportUi();
+  /* datos que llegaron de otro teléfono (versión web con espacio compartido) */
+  window.addEventListener('appsync:applied',safe(e=>{
+    if(!e.detail||e.detail.tool!=='cotizador') return;
+    const active=document.activeElement, typing=active&&/^(INPUT|TEXTAREA|SELECT)$/.test(active.tagName);
+    const draft=S.draft; load(); S.draft=draft;   /* el borrador es de este teléfono: se conserva lo que se está escribiendo */
+    if(!typing) fillBrand(); applyTheme(); renderCatalog(); renderResults(); renderLines(); updateTotals(); renderHistory(); renderTemplates(); renderTplQuick();
+  }));
   $$('.nav button').forEach(b=>b.addEventListener('click',safe(()=>setTab(b.dataset.tab))));
   if('IntersectionObserver' in window){
     new IntersectionObserver(es=>{ totVisible=es[0].isIntersecting; syncMini(); },{threshold:.2}).observe($('#totCard'));

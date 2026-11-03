@@ -5,6 +5,7 @@
   var title = me && me.getAttribute('data-title');
   var css = '#appbar{position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:8px;background:#17212b;color:#fff;padding:calc(env(safe-area-inset-top,0px) + 6px) 10px 6px;font:600 15px/1.2 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}' +
     '#appbar a{display:inline-flex;align-items:center;gap:4px;color:#fff;text-decoration:none;background:rgba(255,255,255,.14);border-radius:999px;padding:8px 14px 8px 10px;font-weight:700;font-size:14px;min-height:36px}' +
+    '#syncst{margin-left:auto;font-size:12.5px;font-weight:700;opacity:.9;white-space:nowrap}#syncst.st-ok{color:#86efac}#syncst.st-error{color:#fca5a5}#syncst.st-offline{color:#fde68a}' +
     '#appbar a:focus-visible{outline:3px solid #a5b4fc;outline-offset:2px}#appbar b{margin-left:4px}' +
     '#upd{position:fixed;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 56px);z-index:200;display:flex;align-items:center;gap:10px;background:#1e1b4b;color:#fff;border:1px solid #4338ca;border-radius:18px;padding:10px 10px 10px 16px;box-shadow:0 16px 40px rgba(0,0,0,.35);font:600 14px system-ui,-apple-system,sans-serif;width:max-content;max-width:calc(100vw - 24px)}' +
     '#upd button{border:0;border-radius:999px;font:inherit;font-weight:800;cursor:pointer;min-height:38px;padding:0 14px}#upd .go{background:#fff;color:#3730a3}#upd .no{background:rgba(255,255,255,.16);color:#fff}' +
@@ -14,7 +15,14 @@
     var bar = document.createElement('div'); bar.id = 'appbar';
     var a = document.createElement('a'); a.href = '/'; a.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>Inicio';
     var b = document.createElement('b'); b.textContent = title;
-    bar.appendChild(a); bar.appendChild(b);
+    var sy = document.createElement('span'); sy.id = 'syncst'; sy.setAttribute('role', 'status'); sy.hidden = true;
+    bar.appendChild(a); bar.appendChild(b); bar.appendChild(sy);
+    var LABEL = { syncing: 'Sincronizando…', ok: 'Sincronizado', offline: 'Sin conexión', error: 'Sin sincronizar' };
+    window.addEventListener('appsync:status', function (e) {
+      var d = e.detail || {}; if (d.state === 'off') { sy.hidden = true; return; }
+      sy.hidden = false; sy.className = 'st-' + d.state; sy.textContent = (d.state === 'ok' ? '● ' : d.state === 'syncing' ? '◌ ' : '○ ') + (LABEL[d.state] || '');
+      sy.title = d.error || '';
+    });
     var put = function () { document.body.insertBefore(bar, document.body.firstChild); };
     if (document.body) put(); else document.addEventListener('DOMContentLoaded', put);
   }

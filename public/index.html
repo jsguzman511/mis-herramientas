@@ -24,6 +24,16 @@ body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-ap
 .install b{display:block;margin-bottom:4px}.install p{margin:0;color:var(--muted);font-size:14px}
 .install button{margin-top:10px;border:0;border-radius:999px;background:linear-gradient(100deg,#0f766e,#5b21b6);color:#fff;font:inherit;font-weight:800;min-height:44px;padding:0 20px;cursor:pointer}
 .note{color:var(--muted);font-size:13px;text-align:center;margin:18px 8px 0}
+.team{background:var(--card);border-radius:24px;padding:18px;margin-top:18px;box-shadow:var(--sh)}
+.team h2{margin:0 0 4px;font-size:18px}.team p{margin:0 0 12px;color:var(--muted);font-size:14px}
+.team .row{display:flex;gap:8px;flex-wrap:wrap}
+.team button{border:0;border-radius:999px;font:inherit;font-weight:800;cursor:pointer;min-height:44px;padding:0 18px;background:#e8eef0;color:var(--ink)}
+.team button.main{background:linear-gradient(100deg,#0f766e,#5b21b6);color:#fff}
+.team button.dng{background:#fdecea;color:#b42318}
+.team input{width:100%;min-height:46px;border:1.5px solid #d5dbe3;border-radius:14px;padding:0 14px;font:15px ui-monospace,Menlo,monospace;margin-bottom:10px}
+.team .code{word-break:break-all;background:#eef3f2;border-radius:14px;padding:12px;font:14px ui-monospace,Menlo,monospace;margin-bottom:10px;user-select:all}
+.team .ok{color:#18794e;font-weight:800}.team .err{color:#b42318;font-size:14px;margin:6px 0 10px}
+.team [hidden]{display:none!important}
 @media (min-width:960px){.home{max-width:1180px;padding:48px 28px 32px}.home h1{font-size:38px}.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.tile{margin-bottom:0;min-height:240px}}
 @media (max-height:520px){.home{padding:16px}.home h1{font-size:24px}.home .sub{margin-bottom:14px}.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.tile{min-height:0;margin-bottom:0;padding:14px}.tile p{display:none}.tile h2{font-size:19px}}
 </style><script src="/shell.js"></script></head><body>
@@ -36,6 +46,18 @@ body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-ap
     <a class="tile t-fin" href="/finanzas.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 7V5a2 2 0 0 0-2-2H5a2 2 0 0 0 0 4h14a1 1 0 0 1 1 1v3"/><path d="M3 5v14a2 2 0 0 0 2 2h14a1 1 0 0 0 1-1v-3"/><path d="M21 12v4h-4a2 2 0 0 1 0-4z"/></svg></span><h2>Finanzas</h2><p>Ingresos, gastos, cuentas, deudas y metas, con los perfiles que quieras.</p><span class="go">Abrir →</span></a>
     <a class="tile t-cal" href="/calendario.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg></span><h2>Calendario</h2><p>Organiza tus días, planifica tus actividades y mantén tus compromisos bajo control.</p><span class="go">Abrir →</span></a>
   </div>
+  <section class="team" id="team">
+    <h2>Trabajar en equipo</h2>
+    <div id="tOff"><p>Comparte el Cotizador, Finanzas y el Calendario con otra persona (por ejemplo, tu asistente). Los cambios aparecen en los dos teléfonos, cifrados de extremo a extremo.</p>
+      <div class="row"><button type="button" class="main" id="tCreate">Crear espacio compartido</button><button type="button" id="tShowJoin">Unirme con un código</button></div>
+      <div id="tJoinBox" hidden style="margin-top:12px"><input id="tCode" placeholder="Pega aquí el código (empieza por MH1-)" autocomplete="off" autocapitalize="off" spellcheck="false"><button type="button" class="main" id="tJoin">Unirme</button></div></div>
+    <div id="tOn" hidden><p><span class="ok">● Conectado a tu espacio compartido.</span> <span id="tSt"></span></p>
+      <div class="row"><button type="button" class="main" id="tInvite">Invitar a alguien</button><button type="button" id="tLeave">Salir del espacio</button></div>
+      <div id="tInviteBox" hidden style="margin-top:12px"><p>Envíale este código a tu asistente. En su teléfono debe abrir la app instalada, tocar «Unirme con un código» y pegarlo. Trátalo como una contraseña: quien lo tenga puede ver y editar los datos.</p>
+        <div class="code" id="tCodeOut"></div><div class="row"><button type="button" id="tCopy">Copiar código</button><button type="button" id="tShare">Compartir</button></div></div>
+      <p style="margin-top:14px"><button type="button" class="dng" id="tDestroy">Eliminar el espacio del servidor</button></p></div>
+    <p class="err" id="tErr" hidden></p>
+  </section>
   <p class="note">Tus datos se guardan en este teléfono. Haz copias de seguridad de vez en cuando.</p>
 </main>
 <script>
@@ -49,6 +71,27 @@ body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-ap
   window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();ev=e;T.textContent='Instala la app en este dispositivo';P.textContent='Ábrela desde tu pantalla de inicio, sin conexión y con recordatorios.';B.hidden=false;box.hidden=false;});
   B.addEventListener('click',function(){if(!ev)return;ev.prompt();ev.userChoice.then(function(){box.hidden=true;ev=null;});});
   window.addEventListener('appinstalled',function(){box.hidden=true;});
+})();
+</script>
+<script src="/sync.js"></script>
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id)};
+  var LABEL={syncing:'Sincronizando…',ok:'Todo sincronizado.',offline:'Sin conexión: se sincronizará al volver la señal.',error:'No se pudo sincronizar.'};
+  function err(m){var e=$('tErr');e.hidden=!m;e.textContent=m||''}
+  function paint(){var on=AppSync.connected();$('tOff').hidden=on;$('tOn').hidden=!on;if(!on)$('tInviteBox').hidden=true}
+  addEventListener('appsync:status',function(e){var d=e.detail||{};$('tSt').textContent=(LABEL[d.state]||'')+(d.state==='error'&&d.error?' ('+d.error+')':'')});
+  function busy(b,on){b.disabled=on;b.style.opacity=on?.6:1}
+  $('tCreate').onclick=async function(){var b=this;err('');busy(b,true);try{await AppSync.create();paint();$('tCodeOut').textContent=AppSync.code();$('tInviteBox').hidden=false}catch(e){err(e.message||'No se pudo crear el espacio. Revisa tu conexión.')}busy(b,false)};
+  $('tShowJoin').onclick=function(){$('tJoinBox').hidden=false;$('tCode').focus()};
+  $('tJoin').onclick=async function(){var b=this;err('');busy(b,true);try{await AppSync.join($('tCode').value);paint()}catch(e){err(e.message||'No se pudo unir. Revisa el código y tu conexión.')}busy(b,false)};
+  $('tInvite').onclick=function(){$('tCodeOut').textContent=AppSync.code();$('tInviteBox').hidden=!$('tInviteBox').hidden};
+  $('tCopy').onclick=async function(){try{await navigator.clipboard.writeText(AppSync.code());this.textContent='Copiado'}catch(e){var r=document.createRange();r.selectNodeContents($('tCodeOut'));var s=getSelection();s.removeAllRanges();s.addRange(r);this.textContent='Selecciónalo y copia'}};
+  $('tShare').onclick=function(){var t='Código para unirte a mi espacio en '+location.origin+' (abre la app instalada → Unirme con un código):\n'+AppSync.code();if(navigator.share)navigator.share({text:t}).catch(function(){});else{navigator.clipboard&&navigator.clipboard.writeText(t);this.textContent='Copiado'}};
+  $('tLeave').onclick=function(){if(confirm('¿Salir del espacio compartido? Tus datos se quedan en este teléfono, pero dejarán de sincronizarse.')){AppSync.leave();paint()}};
+  $('tDestroy').onclick=async function(){if(!confirm('¿Eliminar el espacio y sus datos del servidor? Cada teléfono conserva su copia, pero ya no se sincronizarán. No se puede deshacer.'))return;err('');try{await AppSync.destroy();paint()}catch(e){err(e.message||'No se pudo eliminar.')}};
+  paint();
+  addEventListener('load',function(){AppSync.start(AppSync.tools)});
 })();
 </script>
 </body></html>

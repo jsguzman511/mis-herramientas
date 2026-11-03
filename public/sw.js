@@ -1,7 +1,7 @@
 /* Service worker: la app funciona sin conexión y recibe notificaciones push.
    VERSION y ASSETS los completa el script de construcción. */
-const VERSION = 'dd3e134a1ed7';
-const ASSETS = ["/calendario.html", "/cotizador.html", "/finanzas.html", "/icons/apple-touch-icon.png", "/icons/badge-96.png", "/icons/favicon-32.png", "/icons/icon-192.png", "/icons/icon-512.png", "/icons/maskable-512.png", "/index.html", "/manifest.webmanifest", "/shell.js"];
+const VERSION = '9226ec4255e7';
+const ASSETS = ["/calendario.html", "/cotizador.html", "/finanzas.html", "/icons/apple-touch-icon.png", "/icons/badge-96.png", "/icons/favicon-32.png", "/icons/icon-192.png", "/icons/icon-512.png", "/icons/maskable-512.png", "/index.html", "/manifest.webmanifest", "/shell.js", "/sync.js"];
 const CACHE = 'app-' + VERSION;
 
 self.addEventListener('install', e => {
