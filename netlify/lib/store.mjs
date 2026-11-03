@@ -15,10 +15,13 @@ function fileStore(dir) {
   };
 }
 
-export async function devices() {
-  if (process.env.LOCAL_STORE_DIR) return fileStore(process.env.LOCAL_STORE_DIR);
+export const devices = () => named(NAME);
+export const spaces = () => named('espacios');
+
+async function named(name) {
+  if (process.env.LOCAL_STORE_DIR) return fileStore(path.join(process.env.LOCAL_STORE_DIR, name === NAME ? '' : name));
   const { getStore } = await import('@netlify/blobs');
-  const s = getStore({ name: NAME, consistency: 'strong' });
+  const s = getStore({ name, consistency: 'strong' });
   return {
     get: k => s.get(k, { type: 'json' }),
     set: (k, v) => s.setJSON(k, v),
